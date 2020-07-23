@@ -11,7 +11,7 @@ namespace RollYourOwnCryptoWPF.ViewModels
         private double _progress;
         private EncDec _encDec;
         private Timer clock;
-        private const int _timerInterval = 13;
+        private const int _timerInterval = 10;
 
         public string Key
         {
@@ -66,6 +66,7 @@ namespace RollYourOwnCryptoWPF.ViewModels
 
                 clock.Stop();
                 clock.Dispose();
+                SyncProgress(this, null);
             }
         }
 

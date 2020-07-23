@@ -1,5 +1,6 @@
 ﻿using Microsoft.Win32;
 using RollYourOwnCryptoWPF.ViewModels;
+using System;
 using System.Windows;
 
 
@@ -39,7 +40,28 @@ namespace RollYourOwnCryptoWPF
 
         private async void btnEncDec_Click(object sender, RoutedEventArgs e)
         {
-            await _main.EncDecVM.EncryptDecrypt();
+            try
+            {
+                byte[] keyList = new byte[tbxKey.Text.Length / 2];
+                for (UInt16 i = 0; i < tbxKey.Text.Length / 2; i++)
+                {
+                    keyList[i] = Convert.ToByte(tbxKey.Text.Substring(2 * i, 2), 16);
+                }
+                if (tbxKey.Text != "" && tbxKey.Text.Length % 32 == 0)
+                {
+                    await _main.EncDecVM.EncryptDecrypt();
+                    MessageBox.Show("Operation completed successfully.", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+                    _main.EncDecVM.Progress = 0;
+                }
+                else
+                {
+                    MessageBox.Show("Key length is invalid.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
+            catch (FormatException)
+            {
+                MessageBox.Show("Key format is invalid.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
     }
 }
